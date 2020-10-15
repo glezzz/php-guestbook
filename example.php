@@ -15,8 +15,12 @@ $articles = ['Terror over london', 'Football: a useless hobby?', 'Economic crisi
     <title>My site</title>
 </head>
 <body>
-    <h1>Welcome to my site!</h1>
-    <h2>Recent articles</h2>
-    <h2>Recent articles</h2>
+    <form method="post">
+        <input type="text" name="title" placeholder="title"><br>
+        <input type="text" name="message" placeholder="message"><br>
+        <input type="text" name="author" placeholder="author"><br>
+        <input type="submit" value="Submit">
+
+    </form>
 </body>
 </html>
