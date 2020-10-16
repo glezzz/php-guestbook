@@ -34,7 +34,7 @@ function whatIsHappening()
     var_dump($_SESSION);
 }
 
-//discovered this type of comment called function header comment. If you hover function's name it will display this comment
+
 /**
  * sets up session values and restore post content from previous session
  */
@@ -104,20 +104,18 @@ function createNewPost()
     $title = $content = $content = "";
 }
 
-function formatString($txt)
-{
+function formatString($txt){
     $txt2 = htmlspecialchars($txt);
     $txt2 = str_replace(":-)", '&#x1F642', $txt2);
     return $txt2;
 }
 
 
+
 loadSessionData();
 if (validatePost()) {
     createNewPost();
 }
-
-
 saveSessionData();
 
 whatIsHappening();

@@ -11,7 +11,7 @@ class PostLoader
 
     public function __construct()
     {
-        echo "new post loader <br/>";
+        //echo "new post loader <br/>";
     }
 
     public function createPost(string $title, string $content, string $author)
@@ -20,7 +20,7 @@ class PostLoader
         //echo $post . "<br/>";
         //echo count($this->posts) . "<br/>";
         array_unshift($this->posts, $post);     //array_unshift — Prepend one or more elements to the beginning of an array
-        echo count($this->posts) . "<br/>";
+        //echo count($this->posts) . "<br/>";
         $this->saveAllPosts();
     }
 
@@ -49,7 +49,7 @@ class PostLoader
      */
     public function loadAllPosts()
     {
-        echo 'loadAllPosts()<br/>';
+        //echo 'loadAllPosts()<br/>';
         if (file_exists($this->file_name)) {
             //open a file
             $content = file_get_contents($this->file_name);
