@@ -4,7 +4,7 @@
  * Class Post stores user post
  */
 class Post implements JsonSerializable  //use implements JsonSerializable to be able to use private properties, because otherwise getting error
-{
+{                                       //Case similar to mine: https://www.codebyamir.com/blog/object-to-json-in-php
     private string $title;
     private DateTimeImmutable $date;
     private string $content;
@@ -44,12 +44,12 @@ class Post implements JsonSerializable  //use implements JsonSerializable to be 
     }
 
     public function jsonSerialize()  //Objects implementing JsonSerializable can customize their JSON representation when encoded with json_encode().
-    {
+    {                               //Case similar to mine: https://www.codebyamir.com/blog/object-to-json-in-php
         return
             [
                 'title' => $this->getTitle(),
                 'content' => $this->getContent(),
-                'date' => $this->getDate()->format(DateTimeInterface::ISO8601),
+                'date' => $this->getDate()->format('Y-m-d'),
                 'author' => $this->getAuthor()
             ];
     }

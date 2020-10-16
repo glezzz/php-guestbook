@@ -36,7 +36,7 @@ function whatIsHappening()
 
 
 /**
- * sets up session values and restore post content from previous session
+ * Sets up session values and restore post content from previous session
  */
 function loadSessionData()
 {
@@ -75,15 +75,15 @@ function saveSessionData()
 }
 
 /**
- * returns true when all values are right,
+ * Returns true when all values are right,
  * false otherwise
  */
 function validatePost()
 {
     global $author, $title, $content;
-    global $authorErr, $titleErr, $contentErr;
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {     //check if coming from form post
+
         $content = $_POST['message'];
         $title = $_POST['title'];
         $author = $_POST['author'];
@@ -93,7 +93,7 @@ function validatePost()
 }
 
 /**
- * creates new post using content coming from user
+ * Creates new post using content coming from user
  */
 function createNewPost()
 {
@@ -104,12 +104,15 @@ function createNewPost()
     $title = $content = $content = "";
 }
 
-function formatString($txt){
+/**
+ * Replaces special characters for smileys
+ */
+function formatString($txt)
+{
     $txt2 = htmlspecialchars($txt);
     $txt2 = str_replace(":-)", '&#x1F642', $txt2);
     return $txt2;
 }
-
 
 
 loadSessionData();
@@ -118,7 +121,7 @@ if (validatePost()) {
 }
 saveSessionData();
 
-whatIsHappening();
+//whatIsHappening();
 
 require_once 'index_view.php';
 
