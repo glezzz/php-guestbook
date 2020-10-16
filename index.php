@@ -15,7 +15,14 @@ require 'Post.php';
 require 'PostLoader.php';
 session_start();
 
-function whatIsHappening(){
+$title = $content = $author = "";
+$titleErr = $contentErr = $authorErr = null;
+
+$posts_loader = null;
+$posts = [];
+
+function whatIsHappening()
+{
 
     echo '<h2>$_GET</h2>';
     var_dump($_GET);
@@ -27,60 +34,93 @@ function whatIsHappening(){
     var_dump($_SESSION);
 }
 
-if(isset($_SESSION['posts'])) {
-    $posts = $_SESSION['posts'];
+//discovered this type of comment called function header comment. If you hover function's name it will display this comment
+/**
+ * sets up session values and restore post content from previous session
+ */
+function loadSessionData()
+{
+    global $posts_loader, $author, $title, $content;
 
-}else{
-    $posts = new PostLoader();
+    if (isset($_SESSION['posts'])) {
+        $posts_loader = $_SESSION['posts'];
+
+    } else {
+        $posts_loader = new PostLoader();
+    }
+
+    $title = $content = $author = "";
+
+    if (isset($_SESSION['title'])) {
+        $title = $_SESSION['title'];
+    }
+
+    if (isset($_SESSION['message'])) {
+        $content = $_SESSION['message'];
+    }
+
+    if (isset($_SESSION['author'])) {
+        $author = $_SESSION['author'];
+    }
+}
+
+function saveSessionData()
+{
+    global $posts_loader, $author, $title, $content;
+
+    $_SESSION['posts'] = $posts_loader;
+    $_SESSION['title'] = $title;
+    $_SESSION['message'] = $content;
+    $_SESSION['author'] = $author;
+}
+
+/**
+ * returns true when all values are right,
+ * false otherwise
+ */
+function validatePost()
+{
+    global $author, $title, $content;
+    global $authorErr, $titleErr, $contentErr;
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {     //check if coming from form post
+        $content = $_POST['message'];
+        $title = $_POST['title'];
+        $author = $_POST['author'];
+        return true;
+    }
+    return false;
+}
+
+/**
+ * creates new post using content coming from user
+ */
+function createNewPost()
+{
+    global $posts_loader, $title, $author, $content;
+
+    $posts_loader->createPost($title, $content, $author);
+//clear the input values
+    $title = $content = $content = "";
+}
+
+function formatString($txt)
+{
+    $txt2 = htmlspecialchars($txt);
+    $txt2 = str_replace(":-)", '&#x1F642', $txt2);
+    return $txt2;
 }
 
 
-$title = $content = $author = "";
-
-if(isset($_SESSION['title'])){
-    $title = $_SESSION['title'];
-}
-
-if(isset($_SESSION['message'])){
-    $title = $_SESSION['message'];
-}
-
-if(isset($_SESSION['author'])){
-    $title = $_SESSION['author'];
+loadSessionData();
+if (validatePost()) {
+    createNewPost();
 }
 
 
-
-
-$file = 'posts.json';
-$message = $_POST['content'];
-
-file_put_contents($file, $message);
-
-
+saveSessionData();
 
 whatIsHappening();
 
-?>
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>My site</title>
-</head>
-<body>
-    <form method="post">
-        <input type="text" name="title" placeholder="title"><br>
-        <input type="text" name="message" placeholder="message"><br>
-        <input type="text" name="author" placeholder="author"><br>
-        <input type="submit" value="Submit">
+require_once 'index_view.php';
 
-    </form>
-    <div>
-        <?php $posts->printPosts(); ?>
-    </div>
-</body>
-</html>
